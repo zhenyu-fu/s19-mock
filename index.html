@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0e1118" />
+  <title>S19 阵容模拟器 · Prismatic Tour</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">S19</span>
+        <div>
+          <h1>阵容模拟器</h1>
+          <p>PRISMATIC TOUR · 只拼阵容，不模拟战斗</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <span class="population" id="population">0 / 10 人口</span>
+        <button class="button button-muted" id="resetBtn">清空棋盘</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="board-panel panel">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">BOARD</span>
+            <h2>我的阵容</h2>
+          </div>
+          <div class="board-hint">点击弈子加入 · 点击棋盘弈子移除</div>
+        </div>
+        <div class="board-shell">
+          <div class="row-labels" aria-hidden="true">
+            <span>前排</span>
+            <span>二排</span>
+            <span>三排</span>
+            <span>后排</span>
+          </div>
+          <div class="board" id="board" role="grid" aria-label="阵容棋盘"></div>
+        </div>
+        <div class="board-legend">
+          <span><i class="legend-dot tank"></i>坦克 前排</span>
+          <span><i class="legend-dot fighter"></i>战士 二排</span>
+          <span><i class="legend-dot carry"></i>C位 后排</span>
+        </div>
+      </section>
+
+      <aside class="traits-panel panel">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">SYNERGIES</span>
+            <h2>当前羁绊</h2>
+          </div>
+          <span class="active-count" id="activeTraitCount">0 激活</span>
+        </div>
+        <div class="trait-list" id="traitList"></div>
+      </aside>
+
+      <section class="library-panel panel">
+        <div class="section-head library-head">
+          <div>
+            <span class="eyebrow">CHAMPIONS</span>
+            <h2>选择弈子</h2>
+          </div>
+          <span class="library-count" id="libraryCount"></span>
+        </div>
+        <div class="filters">
+          <label class="search-box">
+            <span aria-hidden="true">⌕</span>
+            <input id="searchInput" type="search" placeholder="搜索弈子…" autocomplete="off" />
+          </label>
+          <div class="cost-filters" id="costFilters">
+            <button class="filter-chip active" data-cost="0">全部</button>
+            <button class="filter-chip cost-1" data-cost="1">1</button>
+            <button class="filter-chip cost-2" data-cost="2">2</button>
+            <button class="filter-chip cost-3" data-cost="3">3</button>
+            <button class="filter-chip cost-4" data-cost="4">4</button>
+            <button class="filter-chip cost-5" data-cost="5">5</button>
+            <button class="filter-chip cost-7" data-cost="7">7</button>
+          </div>
+        </div>
+        <div class="unit-grid" id="unitGrid"></div>
+        <p class="empty-state" id="emptyState" hidden>没有找到匹配的弈子</p>
+      </section>
+    </main>
+
+    <section class="saved-panel panel">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">LOCAL STORAGE</span>
+          <h2>我的阵容库</h2>
+        </div>
+        <span class="saved-tip">阵容保存在当前浏览器</span>
+      </div>
+      <div class="save-row">
+        <input id="lineupName" class="name-input" type="text" maxlength="30" value="我的 S19 阵容" />
+        <button class="button button-primary" id="saveBtn">保存当前阵容</button>
+      </div>
+      <div class="saved-list" id="savedList"></div>
+    </section>
+
+    <footer>数据基于 TFT Set 19 PBE 资料 · 阵容仅保存在本地浏览器</footer>
+  </div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
