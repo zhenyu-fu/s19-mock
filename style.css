@@ -113,6 +113,9 @@ h2 { margin-top: 3px; font-size: 18px; }
 .filter-chip.active { color: #201709; background: var(--gold-light); border-color: transparent; }
 .filter-chip.cost-1.active { background: #b7c9df; }.filter-chip.cost-2.active { background: #e5c067; }.filter-chip.cost-3.active { background: #b596f0; }
 .filter-chip.cost-4.active { background: #f08b91; }.filter-chip.cost-5.active, .filter-chip.cost-7.active { background: #fb8ac6; }
+.trait-filter { display: inline-flex; align-items: center; gap: 7px; min-height: 32px; padding: 0 9px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); background: rgba(255,255,255,.04); font-size: 11px; }
+.trait-filter select { min-width: 105px; border: 0; outline: 0; color: var(--text); background: transparent; font-size: 12px; }
+.trait-filter option { color: var(--text); background: var(--panel-light); }
 .unit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
 .unit-card { position: relative; display: grid; grid-template-columns: 48px minmax(0, 1fr); grid-template-rows: auto auto; gap: 4px 9px; min-height: 74px; padding: 9px; border: 1px solid var(--line); border-radius: 10px; text-align: left; background: rgba(255,255,255,.035); transition: .16s ease; }
 .unit-card:hover { transform: translateY(-2px); border-color: var(--line-strong); background: var(--panel-light); }

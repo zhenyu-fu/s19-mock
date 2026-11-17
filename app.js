@@ -17,7 +17,8 @@
   var state = {
     board: loadCurrentBoard(),
     search: "",
-    cost: 0
+    cost: 0,
+    trait: ""
   };
 
   function $(selector, root) {
@@ -206,7 +207,8 @@
           return traitsByKey[key].name.toLowerCase().indexOf(keyword) >= 0 ||
             traitsByKey[key].nameEn.toLowerCase().indexOf(keyword) >= 0;
         });
-      return matchesSearch && (!state.cost || unit.cost === state.cost);
+      var matchesTrait = !state.trait || unit.traits.indexOf(state.trait) >= 0;
+      return matchesSearch && matchesTrait && (!state.cost || unit.cost === state.cost);
     });
     $("#libraryCount").textContent = list.length + " / " + DATA.units.length;
     $("#emptyState").hidden = list.length > 0;
@@ -327,6 +329,16 @@
 
   $("#searchInput").addEventListener("input", function (event) {
     state.search = event.target.value.trim();
+    renderUnits();
+  });
+  DATA.traits.forEach(function (trait) {
+    var option = document.createElement("option");
+    option.value = trait.key;
+    option.textContent = trait.name;
+    $("#traitFilter").appendChild(option);
+  });
+  $("#traitFilter").addEventListener("change", function (event) {
+    state.trait = event.target.value;
     renderUnits();
   });
   $all("#costFilters .filter-chip").forEach(function (button) {
