@@ -104,7 +104,45 @@
 
     <footer>数据基于 TFT Set 19 PBE 资料 · 阵容仅保存在本地浏览器</footer>
   </div>
+  <div class="modal-backdrop" id="unitModal" hidden>
+    <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="unitModalTitle">
+      <button class="modal-close" type="button" data-close-modal aria-label="关闭">×</button>
+      <div class="modal-hero" id="unitModalHero"></div>
+      <div class="modal-heading">
+        <div>
+          <span class="eyebrow">CHAMPION ABILITY</span>
+          <h2 id="unitModalTitle"></h2>
+          <p id="unitModalMeta"></p>
+        </div>
+      </div>
+      <div class="detail-section">
+        <h3 id="unitSkillName">技能</h3>
+        <p class="detail-copy" id="unitSkillDescription"></p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop" id="traitModal" hidden>
+    <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="traitModalTitle">
+      <button class="modal-close" type="button" data-close-modal aria-label="关闭">×</button>
+      <div class="modal-heading">
+        <div>
+          <span class="eyebrow">ACTIVE SYNERGY</span>
+          <h2 id="traitModalTitle"></h2>
+          <p id="traitModalMeta"></p>
+        </div>
+      </div>
+      <div class="detail-section">
+        <h3>羁绊效果</h3>
+        <p class="detail-copy" id="traitDescription"></p>
+      </div>
+      <div class="detail-section" id="traitBonusesSection">
+        <h3>激活层级</h3>
+        <div class="bonus-list" id="traitBonuses"></div>
+      </div>
+    </div>
+  </div>
   <script src="data.js"></script>
+  <script src="details.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

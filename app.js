@@ -102,6 +102,61 @@
       population.classList.remove("is-alert");
     }, 1300);
   }
+  function closeModal(modal) {
+    modal.hidden = true;
+  }
+  function openModal(modal) {
+    modal.hidden = false;
+  }
+  function unitDetail(unit) {
+    var source = window.S19_DETAILS.units[unit.apiKey];
+    var ability = source && source.ability;
+    return {
+      name: ability && ability.name,
+      description: window.S19_DETAILS.formatDescription(ability && ability.description)
+    };
+  }
+  function traitDetail(trait) {
+    var source = window.S19_DETAILS.traits[trait.key] || {};
+    return {
+      description: window.S19_DETAILS.formatDescription(source.description),
+      bonuses: (source.bonuses || []).map(function (bonus) {
+        return {
+          needed: bonus.needed,
+          effect: window.S19_DETAILS.formatDescription(bonus.effect)
+        };
+      })
+    };
+  }
+  function showUnitModal(unit) {
+    var modal = $("#unitModal");
+    $("#unitModalHero").innerHTML = unitIcon(unit, "unit-icon modal-unit-icon");
+    $("#unitModalTitle").textContent = unit.name;
+    $("#unitModalMeta").textContent = unit.nameEn + " · " + unit.cost + "费 · " + roleLabel(unit.role);
+    $("#unitSkillName").textContent = "技能加载中…";
+    $("#unitSkillDescription").textContent = "正在读取技能说明";
+    openModal(modal);
+    var detail = unitDetail(unit);
+    $("#unitSkillName").textContent = detail.name || "技能";
+    $("#unitSkillDescription").innerHTML = detail.description;
+  }
+  function showTraitModal(trait) {
+    var modal = $("#traitModal");
+    $("#traitModalTitle").textContent = trait.name;
+    $("#traitModalMeta").textContent = trait.nameEn + " · " + (trait.type === "origin" ? "羁绊" : "职业");
+    $("#traitDescription").textContent = "正在读取羁绊说明";
+    $("#traitBonuses").innerHTML = "";
+    $("#traitBonusesSection").hidden = true;
+    openModal(modal);
+    var detail = traitDetail(trait);
+    $("#traitDescription").innerHTML = detail.description || "暂无羁绊总说明";
+    if (detail.bonuses.length) {
+      $("#traitBonusesSection").hidden = false;
+      $("#traitBonuses").innerHTML = detail.bonuses.map(function (bonus) {
+        return '<div class="bonus-row"><strong>' + bonus.needed + '人</strong><span>' + bonus.effect + "</span></div>";
+      }).join("");
+    }
+  }
   function renderBoard() {
     var board = $("#board");
     board.innerHTML = "";
@@ -154,7 +209,10 @@
         '<span class="unit-info"><strong>' + unit.name + '</strong><small>' + roleLabel(unit.role) + "</small></span>" +
         '<span class="unit-traits">' + unit.traits.map(function (key) { return traitsByKey[key].name; }).join(" · ") + "</span>" +
         (count ? '<span class="unit-used">已上场 ' + count + "</span>" : "");
-      card.addEventListener("click", function () { addUnit(unit.id); });
+      card.addEventListener("click", function () {
+        if (!countOnBoard(unit.id)) addUnit(unit.id);
+        showUnitModal(unit);
+      });
       grid.appendChild(card);
     });
   }
@@ -183,11 +241,21 @@
     traits.forEach(function (item) {
       var row = document.createElement("div");
       row.className = "trait-row " + (item.current ? "is-active" : "");
+      row.tabIndex = 0;
+      row.setAttribute("role", "button");
+      row.setAttribute("aria-label", "查看 " + item.trait.name + " 羁绊技能");
       var status = item.current ? item.current + " 档" : "还差 " + (item.next - item.count);
       row.innerHTML =
         '<span class="trait-mark">' + item.trait.name.slice(0, 1) + "</span>" +
         '<span class="trait-main"><strong>' + item.trait.name + '</strong><small>' + item.trait.nameEn + "</small></span>" +
         '<span class="trait-count">' + item.count + " <em>" + status + "</em></span>";
+      row.addEventListener("click", function () { showTraitModal(item.trait); });
+      row.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          showTraitModal(item.trait);
+        }
+      });
       list.appendChild(row);
     });
   }
@@ -262,5 +330,13 @@
     render();
   });
   $("#saveBtn").addEventListener("click", saveLineup);
+  $all(".modal-backdrop").forEach(function (modal) {
+    modal.addEventListener("click", function (event) {
+      if (event.target === modal || event.target.hasAttribute("data-close-modal")) closeModal(modal);
+    });
+  });
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") $all(".modal-backdrop:not([hidden])").forEach(closeModal);
+  });
   render();
 })();
