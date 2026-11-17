@@ -108,22 +108,30 @@
   function openModal(modal) {
     modal.hidden = false;
   }
+  function detailText(value, fallback) {
+    return String(value || fallback || "暂无说明")
+      .replace(/<br\s*\/?>/gi, "<br>")
+      .replace(/<\/?Bright>/gi, function (tag) {
+        return tag.charAt(1) === "/" ? "</strong>" : "<strong>";
+      })
+      .replace(/<(?!\/?(?:strong|br)>)[^>]*>/gi, "");
+  }
   function unitDetail(unit) {
     var source = window.S19_DETAILS.units[unit.apiKey];
     var ability = source && source.ability;
     return {
-      name: ability && ability.name,
-      description: window.S19_DETAILS.formatDescription(ability && ability.description)
+      name: (ability && ability.nameZh) || (ability && ability.name),
+      description: detailText((ability && ability.descriptionZh) || (ability && ability.description))
     };
   }
   function traitDetail(trait) {
     var source = window.S19_DETAILS.traits[trait.key] || {};
     return {
-      description: window.S19_DETAILS.formatDescription(source.description),
+      description: detailText(source.descriptionZh || source.description),
       bonuses: (source.bonuses || []).map(function (bonus) {
         return {
           needed: bonus.needed,
-          effect: window.S19_DETAILS.formatDescription(bonus.effect)
+          effect: detailText(bonus.effectZh || bonus.effect)
         };
       })
     };
