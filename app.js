@@ -116,22 +116,27 @@
       })
       .replace(/<(?!\/?(?:strong|br)>)[^>]*>/gi, "");
   }
+  function localized(value, fallback) {
+    return value && !/^MYMEMORY WARNING/i.test(value) ? value : fallback;
+  }
   function unitDetail(unit) {
     var source = window.S19_DETAILS.units[unit.apiKey];
     var ability = source && source.ability;
     return {
-      name: (ability && ability.nameZh) || (ability && ability.name),
-      description: detailText((ability && ability.descriptionZh) || (ability && ability.description))
+      name: localized(ability && ability.nameZh, ability && ability.name),
+      description: detailText(
+        localized(ability && ability.descriptionZh, ability && ability.description)
+      )
     };
   }
   function traitDetail(trait) {
     var source = window.S19_DETAILS.traits[trait.key] || {};
     return {
-      description: detailText(source.descriptionZh || source.description),
+      description: detailText(localized(source.descriptionZh, source.description)),
       bonuses: (source.bonuses || []).map(function (bonus) {
         return {
           needed: bonus.needed,
-          effect: detailText(bonus.effectZh || bonus.effect)
+          effect: detailText(localized(bonus.effectZh, bonus.effect))
         };
       })
     };
